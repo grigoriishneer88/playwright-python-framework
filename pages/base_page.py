@@ -8,10 +8,10 @@ from tools.logger import get_logger, logger
 class BasePage:
     logger = get_logger("BasePage")
 
-    def __init__(self, page:Page):
+    def __init__(self, page: Page):
         self.page = page
 
-    def visit(self,url:str):
+    def visit(self, url: str):
         step = f'Opening URL {url}'
         with allure.step(step):
             logger.info(step)
