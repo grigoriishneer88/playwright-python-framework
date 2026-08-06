@@ -16,3 +16,6 @@ coverage.html
 coverage-results.json
 coverage-report.json
 coverage-history.json
+
+.coverage
+.DS_Store
