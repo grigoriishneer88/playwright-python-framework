@@ -27,6 +27,10 @@ jobs:
           pip install -r requirements.txt
           playwright install --with-deps
 
+
+      - name: Create .env from template
+        run: cp .env.example .env
+        
       # Убрали continue-on-error согласно требованиям строгого ТЗ (обе джобы должны завершаться успешно)
       - name: Run playwright tests with pytest and generate allure results
         run: xvfb-run pytest -m regression --alluredir=./allure-results --numprocesses=2
