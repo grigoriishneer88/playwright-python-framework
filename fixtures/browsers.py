@@ -17,18 +17,22 @@ def page(request: SubRequest, playwright:Playwright):
 
 @pytest.fixture(scope="session")  # Просто сессионный scope, без autouse
 def initialize_browser_state(playwright: Playwright):
-    brw = playwright.chromium.launch(headless=settings.headless)
-    context = brw.new_context(base_url=settings.get_base_url())
-    page = context.new_page()
-    registration_page = RegistrationPage(page=page)
-    registration_page.visit("https://nikita-filonov.github.io/qa-automation-engineer-ui-course/#/auth/registration")
-    registration_page.registration_form_component.fill_form(
-        email=settings.test_user.email,
-        password=settings.test_user.password,
-        name=settings.test_user.username
-    )
-    registration_page.click_registration_button()
-    context.storage_state(path=settings.browser_state_file)
+    browser = playwright.chromium.launch(headless=settings.headless)
+    context = browser.new_context(base_url=settings.get_base_url())
+    try:
+        page = context.new_page()
+        registration_page = RegistrationPage(page=page)
+        registration_page.visit("https://nikita-filonov.github.io/qa-automation-engineer-ui-course/#/auth/registration")
+        registration_page.registration_form_component.fill_form(
+            email=settings.test_user.email,
+            password=settings.test_user.password,
+            name=settings.test_user.username
+        )
+        registration_page.click_registration_button()
+        context.storage_state(path=settings.browser_state_file)
+    finally:
+        context.close()
+        browser.close()
 
 @pytest.fixture(params=settings.browser)
 def page_with_state(request: SubRequest, playwright:Playwright):
