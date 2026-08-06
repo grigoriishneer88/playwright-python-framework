@@ -18,7 +18,7 @@ for organizing test code with clear, maintainable scripts.
 To get started, clone the project repository using Git:
 
 ```bash
-git clone https://github.com/grigoriishneer88/autotest-ui.git
+git clone https://github.com/grigoriishneer88/playwright-python-framework.git
 cd your-repo-name
 ```
 
