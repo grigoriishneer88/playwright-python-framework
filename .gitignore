@@ -1,17 +1,17 @@
 .env
-.idea
+.idea/
 
-.venv
-__pycache__
+.venv/
+__pycache__/
 
 allure-results
 allure-report
 
 *.html
-*.json
-videos
-tracing
-!/storageState.json
+coverage-results/
+videos/
+tracing/
+.pytest_cache/
 coverage.html
 coverage-results.json
 coverage-report.json
