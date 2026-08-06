@@ -1,15 +1,27 @@
-# UI Course Automation Tests
+# Playwright Python Automation Framework
 
-This project implements automated tests for
-the [UI Course Test Application](https://nikita-filonov.github.io/qa-automation-engineer-ui-course/#/auth/login). The
-tests are written using **Python**, **Pytest**, **Allure** and **Playwright**. The test application’s source code is available
-on [GitHub](https://github.com/Nikita-Filonov/qa-automation-engineer-ui-course).
+This project demonstrates a scalable UI automation framework built with Playwright, Python and Pytest. The project demonstrates a scalable automation architecture using Page Object Model, reusable fixtures, parallel execution, GitHub Actions CI and Allure reporting.
 
-## Project Overview
+The test application source code is available on [GitHub](https://github.com/Nikita-Filonov/qa-automation-engineer-ui-course).
 
-The goal of this project is to automate the testing of the UI Course application. The automated tests verify various
-functionalities of the application to ensure its stability and correctness. The project structure follows best practices
-for organizing test code with clear, maintainable scripts.
+## Overview
+
+
+The framework automates testing of the UI Course application while demonstrating maintainable automation practices.
+
+It is built using the Page Object Model pattern and includes reusable fixtures, test parametrization, parallel execution, configuration management and CI integration.
+
+## Technology Stack
+
+- Playwright
+- Python
+- Pytest
+- Page Object Model (POM)
+- Pytest Fixtures
+- pytest-xdist
+- Allure Reports
+- GitHub Actions
+
 
 ## Getting Started
 
@@ -19,7 +31,7 @@ To get started, clone the project repository using Git:
 
 ```bash
 git clone https://github.com/grigoriishneer88/playwright-python-framework.git
-cd your-repo-name
+cd playwright-python-framework
 ```
 
 ### Create a Virtual Environment
@@ -49,17 +61,15 @@ Once the virtual environment is activated, install the project dependencies list
 pip install -r requirements.txt
 ```
 
-### Additional Playwright Setup (if needed)
 
-If you're running Playwright for the first time, you might need to install the required browsers:
-
+### Install Playwright Browsers
 ```bash
 playwright install
 ```
 
-### Running the Tests with Allure Report Generation
+### Running Tests
 
-To run the tests and generate an Allure report, use the following command:
+To execute regression tests and generate Allure results, run:
 
 ```bash
 pytest -m "regression" --alluredir=./allure-results
@@ -67,9 +77,23 @@ pytest -m "regression" --alluredir=./allure-results
 
 This will execute all tests in the project and display the results in the terminal.
 
+### Additional Examples
+
+```bash
+pytest
+
+pytest -m smoke
+
+pytest -m regression
+
+pytest -n auto
+
+pytest --headed
+```
+
 ### Viewing the Allure Report
 
-After the tests have been executed, you can generate and view the Allure report with:
+After the test execution, generate and open the Allure report by running:
 
 ```bash
 allure serve allure-results
