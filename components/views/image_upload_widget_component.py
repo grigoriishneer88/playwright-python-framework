@@ -4,7 +4,7 @@ from playwright.sync_api import expect
 from components.base_component import BaseComponent
 from components.views.empty_view_component import EmptyViewComponent
 from elements.button import Button
-from elements.file_input import Input
+from elements.file_input import FileInput
 from elements.icon import Icon
 from elements.text import Text
 
@@ -18,7 +18,7 @@ class ImageUploadWidgetComponent(BaseComponent):
         self.image_upload_info_title = Text(page, f'{identifier}-image-upload-widget-info-title-text', 'upload_info_title')
         self.image_upload_info_description = Text(page,f'{identifier}-image-upload-widget-info-description-text', 'upload_info_description')
         self.upload_button = Button(page, f'{identifier}-image-upload-widget-upload-button', 'upload button')
-        self.upload_input_file = Input(page,f'{identifier}-image-upload-widget-input', 'upload_input_file')
+        self.upload_input_file = FileInput(page, f'{identifier}-image-upload-widget-input', 'upload_input_file')
 
         # full view
         # image section

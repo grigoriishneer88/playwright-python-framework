@@ -2,7 +2,8 @@ from components.base_component import BaseComponent
 from playwright.sync_api import Page, expect
 
 from elements.input import Input
-from elements.textarea import TextAria
+from elements.textarea import TextArea
+#updated import
 
 
 class CreateCourseFormComponent(BaseComponent):
@@ -13,7 +14,7 @@ class CreateCourseFormComponent(BaseComponent):
         self.create_course_estimated_time_input = Input(page,
             'create-course-form-estimated-time-input',
             'Create Course Estimated Time')
-        self.create_course_description_input = TextAria(page, 'create-course-form-description-input', 'Create Course Description')
+        self.create_course_description_input = TextArea(page, 'create-course-form-description-input', 'Create Course Description')
         self.create_course_max_score_input = Input(page, 'create-course-form-max-score-input', 'Create Course Max Score')
         self.create_course_min_score_input = Input(page, 'create-course-form-min-score-input', 'Create Course Min Score')
 
