@@ -1,9 +1,10 @@
-from playwright.sync_api import Page, expect
 import allure
+from playwright.sync_api import Page, expect, Locator
+from ui_coverage_tool import ActionType, SelectorType
 
-from tools.logger import get_logger, logger
 from elements.ui_coverage import tracker
-from ui_coverage_tool import ActionType,SelectorType
+from tools.logger import get_logger
+
 
 class BaseElement:
     logger = get_logger('Base_Element')
@@ -13,18 +14,18 @@ class BaseElement:
         self.name = name
         self.locator = locator
 
-    def get_locator(self, nth:int = 0, **kwargs):
+    def get_locator(self, nth: int = 0, **kwargs) -> Locator:
         locator = self.locator.format(**kwargs)
         step = f'Getting locator with "data-testid={locator}" at index" {nth}"'
         with allure.step(step):
-            logger.info(step)
+            self.logger.info(step)
             return self.page.get_by_test_id(locator).nth(nth)
 
     def click(self,nth:int = 0,**kwargs):
         locator = self.get_locator(nth, **kwargs)
         step = f'Clicking {self.type_of} with name {self.name} and "data-testid={locator}" at index" {nth}"'
         with allure.step(step):
-            logger.info(step)
+            self.logger.info(step)
             locator.click()
 
         self.track_coverage(ActionType.CLICK, nth, **kwargs)
@@ -33,7 +34,7 @@ class BaseElement:
         locator = self.get_locator(nth, **kwargs)
         step = f'Checking {self.type_of} with name {self.name} is VISIBLE and "data-testid={locator}" at index" {nth}"'
         with allure.step(step):
-            logger.info(step)
+            self.logger.info(step)
             expect(locator).to_be_visible()
         self.track_coverage(ActionType.VISIBLE, nth, **kwargs)
 
@@ -42,7 +43,7 @@ class BaseElement:
         locator = self.get_locator(nth, **kwargs)
         step = f'Checking that {self.type_of} with name {self.name} has text {text} and "data-testid={locator}" at index" {nth}"'
         with allure.step(step):
-            logger.info(step)
+            self.logger.info(step)
             expect(locator).to_have_text(text)
 
         self.track_coverage(ActionType.TEXT, nth, **kwargs)
