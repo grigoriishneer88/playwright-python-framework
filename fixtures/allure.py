@@ -1,5 +1,4 @@
 import pytest
-from requests import session
 
 from tools.environment import create_allure_environment_file
 

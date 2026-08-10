@@ -20,7 +20,7 @@ class RegistrationPage(BasePage):
         self.registration_button.click()
 
     def visit_registration_page(self):
-        self.page.goto(AppRoute.REGISTRATION)
+        self.visit(AppRoute.REGISTRATION)
 
     def click_login_link(self):
         self.login_link.click()

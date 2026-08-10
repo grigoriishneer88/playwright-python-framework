@@ -1,15 +1,14 @@
-from components.base_component import BaseComponent
-from playwright.sync_api import Page, expect
 import allure
+from playwright.sync_api import Page
+
+from components.base_component import BaseComponent
 from elements.input import Input
 
 
 class LoginFormComponent(BaseComponent):
-    def __init__(self, page:Page):
+    def __init__(self, page: Page):
         super().__init__(page)
-        #self.email_input = page.locator('//*[@id=":r0:"]')
         self.email_input = Input(page, 'login-form-email-input', 'email' )
-        #self.password_input = page.locator('//*[@id=":r1:"]')
         self.password_input = Input(page, 'login-form-password-input', 'password' )
 
     @allure.step('Login with email and password')

@@ -76,4 +76,4 @@ class TestAuthorisation:
     def test_navigate_from_authorisation_to_registration_page(self, login_page: LoginPage, registration_page: RegistrationPage):
         login_page.visit("./#/auth/login")
         login_page.click_register_link()
-        registration_page.registration_form_component.check_if_visible()
+        registration_page.registration_form_component.check_visible()

@@ -1,12 +1,4 @@
-from playwright.sync_api import Page, Route
-#
-# def abort(route:Route):
-#     print(f'\nAborting URL {route.request.url}')
-#     route.abort()
-#
-# def mock_status_resources(page: Page):
-#     page.route("**/*.{ico,png,jpg,svg,webp,mp3,mp4,woff}", abort)
-
+from playwright.sync_api import Page
 
 def mock_status_resources(page: Page):
     page.route("**/*.{ico,png,jpg,svg,webp,mp3,mp4,woff}", lambda route: route.abort())
