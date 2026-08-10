@@ -16,6 +16,7 @@ class RegistrationPage(BasePage):
         self.registration_button = Button(page,"registration-page-registration-button", 'registration-page-registration-button')
         self.login_link = Link(page,"registration-page-login-link", 'Login link')
 
+
     def click_registration_button(self):
         self.registration_button.click()
 
@@ -26,3 +27,5 @@ class RegistrationPage(BasePage):
         self.login_link.click()
         self.check_current_url(re.compile(AppRoute.LOGIN))
 
+    def check_registration_button_is_disabled(self):
+        self.registration_button.check_disabled()

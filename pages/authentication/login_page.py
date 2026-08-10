@@ -27,3 +27,7 @@ class LoginPage(BasePage):
     def check_wrong_email_or_password_alert(self):
         self.wrong_email_or_password_alert.check_visible()
         self.wrong_email_or_password_alert.check_have_text("Wrong email or password")
+
+    @allure.step('Check Login button is visible')
+    def check_login_button_is_visible(self):
+        self.login_button.check_visible()

@@ -41,3 +41,4 @@ class TestRegistration:
             dashboard_page.dashboard_toolbar_view_component.check_visible()
             dashboard_page.side_bar_component.check_visible()
             dashboard_page.side_bar_component.click_logout()
+

@@ -4,6 +4,7 @@ import pytest
 import allure
 
 from config import settings
+from fixtures.pages import login_page
 from pages.authentication.registration_page import RegistrationPage
 from pages.dashboard.dashboard_page import DashboardPage
 from pages.authentication.login_page import LoginPage
@@ -77,3 +78,16 @@ class TestAuthorisation:
         login_page.visit("./#/auth/login")
         login_page.click_register_link()
         registration_page.registration_form_component.check_visible()
+
+    @allure.title("User is returned to Login page after logout")
+    @allure.tag(AllureTags.AUTHORISATION.value)
+    @allure.severity(Severity.CRITICAL)
+    @pytest.mark.already_signed_in
+    def test_logout(
+            self,
+            dashboard_page_with_state: DashboardPage,
+    ):
+        dashboard_page_with_state.visit_dashboard_page()
+        dashboard_page_with_state.side_bar_component.click_logout()
+        login_page_after_logout = LoginPage(dashboard_page_with_state.page)
+        login_page_after_logout.check_login_button_is_visible()
