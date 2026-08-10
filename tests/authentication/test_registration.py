@@ -11,7 +11,7 @@ from tools.allure.epics import AllureEpic
 from tools.allure.stories import AllureStories
 from tools.allure.features import AllureFeature
 from allure_commons.types import Severity
-
+ 
 @pytest.mark.regression
 @pytest.mark.registration
 @allure.epic(AllureEpic.LMS.value)
