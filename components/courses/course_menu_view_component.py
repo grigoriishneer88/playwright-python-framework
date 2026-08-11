@@ -9,7 +9,8 @@ class CourseMenuViewComponent(BaseComponent):
         super().__init__(page)
         self.menu_button = Button(page,'course-view-menu-button', 'Menu')
         self.edit_button = Button(page, 'course-view-edit-menu-item-icon', 'Edit')
-        self.delete_button = Button(page, 'course-view-edit-menu-item-icon', 'Delete')
+        self.delete_button = Button(page, 'course-view-delete-menu-item-text', 'Delete')
+        self.modal_confirm_button = Button(page, 'modal-confirm-button', 'Delete')
 
     @allure.step('Open Course menu at "{index}" and click Edit')
     def click_edit(self, index:int):

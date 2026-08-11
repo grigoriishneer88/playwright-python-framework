@@ -92,3 +92,88 @@ class TestCourses:
         create_course_page.create_course_form_component.fill(title = course_title, estimated = course_estimated, description = course_description, max_score = course_max_score, min_score = course_min_score)
         create_course_page.create_course_toolbar_view_component.click_create_course_button()
         courses_list_page.course_view.check_visible(index= 0, title = course_title, max_score = course_max_score, min_score=course_min_score, estimated_time=course_estimated)
+
+    @allure.severity(Severity.CRITICAL)
+    @allure.title("Delete existing course")
+    @allure.tag(AllureTags.COURSES.value, AllureTags.REGRESSION.value)
+    def test_delete_course(
+            self,
+            create_course_page: CreateCoursePage,
+            courses_list_page: CoursesPage
+    ):
+        create_course_page.visit_create_course_page()
+        create_course_page.create_course_form_component.check_visible()
+        create_course_page.create_course_exercises_toolbar_view_component.check_visible()
+        create_course_page.check_exercises_empty_view_visibility()
+        create_course_page.create_course_form_component.fill(
+            'delete',
+            '12',
+            'course 1 description',
+            '11',
+            '2'
+        )
+        create_course_page.upload_image_widget.check_visible(is_image_uploaded=False)
+        create_course_page.upload_image_widget.upload_preview_image(
+            settings.test_data.image_png_file)
+        create_course_page.upload_image_widget.check_visible(is_image_uploaded=True)
+        create_course_page.create_course_toolbar_view_component.click_create_course_button()
+
+        courses_list_page.course_view.menu.click_delete(index=0)
+        courses_list_page.course_view.menu.modal_confirm_button.click()
+        courses_list_page.course_view.check_not_visible(0, 'delete')
+        courses_list_page.check_empty_view_visibility()
+
+    @allure.severity(Severity.CRITICAL)
+    @allure.title("Try to create course with empty title")
+    @allure.tag(AllureTags.COURSES.value, AllureTags.REGRESSION.value)
+    def test_add_course_with_empty_title(self, create_course_page: CreateCoursePage, courses_list_page: CoursesPage):
+        create_course_page.visit_create_course_page()
+        create_course_page.create_course_form_component.check_visible()
+        create_course_page.create_course_exercises_toolbar_view_component.check_visible()
+        create_course_page.check_exercises_empty_view_visibility()
+
+        create_course_page.create_course_form_component.create_course_estimated_time_input.fill("12")
+        create_course_page.create_course_form_component.create_course_estimated_time_input.check_have_value("12")
+        create_course_page.create_course_form_component.create_course_description_input.fill("course 1 description")
+        create_course_page.create_course_form_component.create_course_description_input.check_have_value("course 1 description")
+        create_course_page.create_course_form_component.create_course_max_score_input.fill("11")
+        create_course_page.create_course_form_component.create_course_max_score_input.check_have_value("11")
+        create_course_page.create_course_form_component.create_course_min_score_input.fill("2")
+        create_course_page.create_course_form_component.create_course_min_score_input.check_have_value("2")
+        create_course_page.create_course_toolbar_view_component.button.check_disabled()
+
+    @allure.severity(Severity.CRITICAL)
+    @allure.title("Try to create course with exercises")
+    @allure.tag(AllureTags.COURSES.value, AllureTags.REGRESSION.value)
+    def test_add_course_with_exercise(self, create_course_page: CreateCoursePage, courses_list_page: CoursesPage):
+        create_course_page.visit_create_course_page()
+        create_course_page.create_course_form_component.check_visible()
+        create_course_page.create_course_exercises_toolbar_view_component.check_visible()
+        create_course_page.check_exercises_empty_view_visibility()
+        create_course_page.create_course_form_component.fill(
+            'course with exercise',
+            '12',
+            'course with exercise description',
+            '11',
+            '2'
+        )
+        create_course_page.create_course_exercises_toolbar_view_component.create_new_exercise_button.click()
+        create_course_page.create_course_exercise_form.title_input.check_visible(exercise_index=0)
+        create_course_page.create_course_exercise_form.title_input.fill("exercise 1 just try title", exercise_index=0)
+        create_course_page.create_course_exercise_form.title_input.check_have_value("exercise 1 just try title",  exercise_index=0)
+        create_course_page.create_course_exercise_form.description_input.check_visible( exercise_index=0)
+        create_course_page.create_course_exercise_form.description_input.fill("exercise 1 just try description",  exercise_index=0)
+        create_course_page.create_course_exercise_form.description_input.check_have_value("exercise 1 just try description",  exercise_index=0)
+        create_course_page.upload_image_widget.check_visible(is_image_uploaded=False)
+
+        create_course_page.upload_image_widget.upload_preview_image(
+            settings.test_data.image_png_file)
+        create_course_page.upload_image_widget.check_visible(is_image_uploaded=True)
+        create_course_page.create_course_toolbar_view_component.click_create_course_button()
+        courses_list_page.course_view.menu.click_edit(index=0)
+        create_course_page.create_course_form_component.create_course_estimated_time_input.check_have_value("12")
+        create_course_page.create_course_form_component.create_course_description_input.check_have_value("course with exercise description")
+        create_course_page.create_course_form_component.create_course_max_score_input.check_have_value("11")
+        create_course_page.create_course_form_component.create_course_min_score_input.check_have_value("2")
+        create_course_page.create_course_exercise_form.title_input.check_have_value("exercise 1 just try title", exercise_index=0)
+        create_course_page.create_course_exercise_form.description_input.check_have_value("exercise 1 just try description",  exercise_index=0)

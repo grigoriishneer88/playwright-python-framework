@@ -38,6 +38,23 @@ class BaseElement:
             expect(locator).to_be_visible()
         self.track_coverage(ActionType.VISIBLE, nth, **kwargs)
 
+##added just now
+    def check_not_visible(self, nth:int = 0, **kwargs):
+        locator = self.get_locator(nth, **kwargs)
+        step = f'Checking {self.type_of} with name {self.name} is NOT VISIBLE and "data-testid={locator}" at index" {nth}"'
+        with allure.step(step):
+            self.logger.info(step)
+            expect(locator).to_be_hidden()
+        self.track_coverage(ActionType.HIDDEN, nth, **kwargs)
+
+    def check_not_have_text(self, text:str,nth:int = 0,**kwargs):
+        locator = self.get_locator(nth, **kwargs)
+        step = f'Checking that {self.type_of} with name {self.name} has NO text {text} and "data-testid={locator}" at index" {nth}"'
+        with allure.step(step):
+            self.logger.info(step)
+            expect(locator).not_to_have_text(text)
+
+        self.track_coverage(ActionType.TEXT, nth, **kwargs)
 
     def check_have_text(self, text:str,nth:int = 0,**kwargs):
         locator = self.get_locator(nth, **kwargs)
