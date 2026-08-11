@@ -25,7 +25,7 @@ from tools.allure.tags import AllureTags
 
 
 class TestCreateCoursesFormValidations:
-
+    #will be implemented later
     @allure.severity(Severity.CRITICAL)
     @allure.title("Try to create course with empty title")
     @allure.tag(AllureTags.COURSES.value, AllureTags.REGRESSION.value)
@@ -38,7 +38,7 @@ class TestCreateCoursesFormValidations:
             settings.test_data.image_png_file)
         create_course_page.create_course_form_component.fill(None, "12", "course 1 description", "11", "2")
         create_course_page.create_course_toolbar_view_component.button.check_disabled()
-
+    #will be implemented later
     @allure.severity(Severity.CRITICAL)
     @allure.title("Try to create course with empty estimated time")
     @allure.tag(AllureTags.COURSES.value, AllureTags.REGRESSION.value)
