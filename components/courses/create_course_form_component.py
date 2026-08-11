@@ -25,6 +25,18 @@ class CreateCourseFormComponent(BaseComponent):
         self.create_course_max_score_input.check_visible()
         self.create_course_min_score_input.check_visible()
 
+    def fill_partially(self, title : str | None, estimated: str | None, description: str | None, max_score: str | None, min_score: str | None):
+        if title is not None:
+            self.create_course_title_input.fill(title)
+        if estimated is not None:
+            self.create_course_estimated_time_input.fill(estimated)
+        if description is not None:
+            self.create_course_description_input.fill(description)
+        if max_score is not None:
+            self.create_course_max_score_input.fill(max_score)
+        if min_score is not None:
+            self.create_course_min_score_input.fill(min_score)
+
     def fill(self, title : str | None, estimated: str | None, description: str | None, max_score: str | None, min_score: str | None):
         if title is not None:
             self.create_course_title_input.fill(title)

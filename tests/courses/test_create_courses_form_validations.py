@@ -36,8 +36,9 @@ class TestCreateCoursesFormValidations:
         create_course_page.check_exercises_empty_view_visibility()
         create_course_page.upload_image_widget.upload_preview_image(
             settings.test_data.image_png_file)
-        create_course_page.create_course_form_component.fill(None, "12", "course 1 description", "11", "2")
+        create_course_page.create_course_form_component.fill_partially(None, "12", "course 1 description no title", "11", "2")
         create_course_page.create_course_toolbar_view_component.button.check_disabled()
+
     #will be implemented later
     @allure.severity(Severity.CRITICAL)
     @allure.title("Try to create course with empty estimated time")
@@ -50,7 +51,7 @@ class TestCreateCoursesFormValidations:
         create_course_page.check_exercises_empty_view_visibility()
         create_course_page.upload_image_widget.upload_preview_image(
             settings.test_data.image_png_file)
-        create_course_page.create_course_form_component.fill("no estimated time", None, "course 1 description", "11",
+        create_course_page.create_course_form_component.fill_partially("no estimated time", None, "course 1 description", "11",
                                                              "2")
         create_course_page.create_course_toolbar_view_component.button.check_disabled()
 
@@ -65,7 +66,7 @@ class TestCreateCoursesFormValidations:
         create_course_page.check_exercises_empty_view_visibility()
         create_course_page.upload_image_widget.upload_preview_image(
             settings.test_data.image_png_file)
-        create_course_page.create_course_form_component.fill("no estimated time", "12", None, "11", "2")
+        create_course_page.create_course_form_component.fill_partially("no description", "12", None, "11", "2")
         create_course_page.create_course_toolbar_view_component.button.check_disabled()
 
     @allure.severity(Severity.CRITICAL)
@@ -78,7 +79,7 @@ class TestCreateCoursesFormValidations:
         create_course_page.check_exercises_empty_view_visibility()
         create_course_page.upload_image_widget.upload_preview_image(
             settings.test_data.image_png_file)
-        create_course_page.create_course_form_component.fill("no estimated time", "12", "course 1 description", None, "2")
+        create_course_page.create_course_form_component.fill_partially("no max score", "12", "course 1 description", None, "2")
         create_course_page.create_course_toolbar_view_component.button.check_disabled()
 
     @pytest.mark.flaky(reruns=2)
@@ -92,5 +93,5 @@ class TestCreateCoursesFormValidations:
         create_course_page.check_exercises_empty_view_visibility()
         create_course_page.upload_image_widget.upload_preview_image(
             settings.test_data.image_png_file)
-        create_course_page.create_course_form_component.fill("no estimated time", "12", "course 1 description", "11", None)
+        create_course_page.create_course_form_component.fill_partially("no min score", "12", "course 1 description", "11", None)
         create_course_page.create_course_toolbar_view_component.button.check_disabled()
