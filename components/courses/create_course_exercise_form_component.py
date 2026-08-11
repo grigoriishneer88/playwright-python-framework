@@ -25,20 +25,30 @@ class CreateCourseExerciseFormComponent(BaseComponent):
     def click_delete_button(self, index: int):
         self.delete_exercise_button.click(index=index)
 
-    @allure.step('Fill create exercise form at index "{index}"')
-    def fill_create_exercise_form(self, exercise_index:int, exercise_title:str, exercise_description:str):
+    @allure.step('Fill create exercise form at index "{exercise_index}"')
+    def fill_create_exercise_form(self, exercise_index:int, exercise_title:str | None, exercise_description:str | None):
 
+        self.subtitle.check_visible(exercise_index = exercise_index)
+        self.subtitle.check_have_text(f"#{exercise_index+1} Exercise", exercise_index = exercise_index)
+        self.title_input.check_visible(exercise_index=exercise_index)
+        self.description_input.check_visible(exercise_index=exercise_index)
 
-        self.title_input.fill(exercise_title, index = exercise_index)
-        self.title_input.check_have_value(exercise_title, index = exercise_index)
-        self.description_input.fill(exercise_description, index = exercise_index)
-        self.description_input.check_have_value(exercise_description, index = exercise_index)
+        if exercise_title is not None:
+            self.title_input.fill(exercise_title, exercise_index = exercise_index)
+            self.title_input.check_have_value(exercise_title, exercise_index = exercise_index)
 
-        self.subtitle.check_visible(index = exercise_index)
-        self.subtitle.check_have_text(f"#{exercise_index+1} Exercise", index = exercise_index)
-        self.title_input.check_visible(index = exercise_index)
-        self.title_input.check_have_value(exercise_title, index = exercise_index)
-        self.description_input.check_visible(index = exercise_index)
-        self.description_input.check_have_value(exercise_description, index = exercise_index)
+        if exercise_description is not None:
+            self.description_input.fill(exercise_description, exercise_index = exercise_index)
+            self.description_input.check_have_value(exercise_description, exercise_index = exercise_index)
 
+    @allure.step('Check filled create exercise form at index "{exercise_index}"')
+    def check_filled_create_exercise_form(self, exercise_index: int, exercise_title: str|None, exercise_description: str|None):
 
+        self.subtitle.check_visible(exercise_index=exercise_index)
+        self.subtitle.check_have_text(f"#{exercise_index + 1} Exercise", exercise_index=exercise_index)
+        if exercise_title is not None:
+            self.title_input.check_visible(exercise_index=exercise_index)
+            self.title_input.check_have_value(exercise_title, exercise_index=exercise_index)
+        if exercise_description is not None:
+            self.description_input.check_visible(exercise_index=exercise_index)
+            self.description_input.check_have_value(exercise_description, exercise_index=exercise_index)

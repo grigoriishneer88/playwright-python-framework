@@ -18,16 +18,20 @@ class CourseViewComponent(BaseComponent):
         self.estimated_time = Text(page, 'course-estimated-time-info-row-view-text', 'Estimated time')
 
     @allure.step('Check visible courses view at index "{index}"')
-    def check_visible(self, index:int, title:str, max_score, min_score:int, estimated_time:int):
+    def check_visible(self, index:int, title: str | None, max_score : str | None, min_score: str | None, estimated_time: str | None):
         self.image.check_visible(nth=index)
-        self.title.check_visible(nth=index)
-        self.title.check_have_text(title, nth=index)
-        self.max_score_text.check_visible(nth=index)
-        self.max_score_text.check_have_text(f"Max score: {max_score}", nth=index)
-        self.min_score_text.check_visible(nth=index)
-        self.min_score_text.check_have_text(f"Min score: {min_score}", nth=index)
-        self.estimated_time.check_visible(nth=index)
-        self.estimated_time.check_have_text(f"Estimated time: {estimated_time}")
+        if title is not None:
+            self.title.check_visible(nth=index)
+            self.title.check_have_text(title, nth=index)
+        if max_score is not None:
+            self.max_score_text.check_visible(nth=index)
+            self.max_score_text.check_have_text(f"Max score: {max_score}", nth=index)
+        if min_score is not None:
+            self.min_score_text.check_visible(nth=index)
+            self.min_score_text.check_have_text(f"Min score: {min_score}", nth=index)
+        if estimated_time is not None:
+            self.estimated_time.check_visible(nth=index)
+            self.estimated_time.check_have_text(f"Estimated time: {estimated_time}")
 
 #added
     @allure.step('Check invisible courses view at index "{index}"')
