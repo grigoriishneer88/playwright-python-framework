@@ -10,19 +10,20 @@ on:
 
 jobs:
 
-  # JOB 1: Run automated tests and save raw results
+  # JOB 1: Run tests and prepare lightweight Allure results
 
   run-tests:
     runs-on: ubuntu-latest
 
     steps:
+
       - name: Check out repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: 3.13
+          python-version: "3.13"
 
       - name: Install dependencies
         run: |
@@ -33,8 +34,23 @@ jobs:
       - name: Create .env from template
         run: cp .env.example .env
 
-      - name: Run playwright tests with pytest and generate allure results
-        run: xvfb-run pytest -m regression --alluredir=./allure-results --numprocesses=2
+      - name: Run Playwright tests with pytest and generate Allure results
+        run: |
+          xvfb-run pytest -m regression --alluredir=./allure-results --numprocesses=2
+
+      # Remove large Playwright artifacts BEFORE uploading allure-results.
+      # This prevents the GitHub Actions artifact from becoming hundreds of MB/GB.
+      - name: Remove large Allure attachments
+        if: always()
+        run: |
+          if [ -d "allure-results" ]; then
+            find ./allure-results -type f \
+              \( -name "*.zip" -o -name "*.webm" -o -name "*.mp4" \) \
+              -delete
+          fi
+
+          echo "Allure results size after cleanup:"
+          du -sh ./allure-results || true
 
       - name: Restore Coverage History
         uses: actions/cache/restore@v4
@@ -53,15 +69,9 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: coverage-history.json
-          key: coverage-history-${{ github.run_id }}
+          key: coverage-history-${{ github.run-id }}
 
-      # Remove large Playwright attachments BEFORE uploading Allure results
-      - name: Remove large attachments
-        if: always()
-        run: |
-          find ./allure-results -type f \( -name "*.zip" -o -name "*.webm" -o -name "*.mp4" \) -delete || true
-
-      - name: Upload coverage results
+      - name: Upload Coverage Results
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -69,7 +79,7 @@ jobs:
           path: coverage.html
           retention-days: 1
 
-      # Upload cleaned Allure results
+      # Upload ONLY the cleaned Allure results.
       - name: Upload Allure Results
         if: always()
         uses: actions/upload-artifact@v4
@@ -79,7 +89,7 @@ jobs:
           retention-days: 1
 
 
-  # JOB 2: Download results, generate Allure report and publish to GitHub Pages
+  # JOB 2: Build Allure report and publish it to GitHub Pages
 
   publish-report:
     runs-on: ubuntu-latest
@@ -92,8 +102,9 @@ jobs:
       contents: write
 
     steps:
+
       - name: Check out repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Download Allure Results
         uses: actions/download-artifact@v4
@@ -104,9 +115,14 @@ jobs:
       - name: Load Allure History
         run: |
           mkdir -p allure-results
+
           TEMP_DIR=$(mktemp -d)
 
-          git clone --branch gh-pages --single-branch https://github.com/${{ github.repository }}.git "$TEMP_DIR" || true
+          git clone \
+            --branch gh-pages \
+            --single-branch \
+            https://github.com/${{ github.repository }}.git \
+            "$TEMP_DIR" || true
 
           if [ -d "$TEMP_DIR/history" ]; then
             cp -r "$TEMP_DIR/history" ./allure-results/
@@ -114,18 +130,18 @@ jobs:
 
       - name: Install Allure CLI and Generate Report
         run: |
-          sudo wget https://github.com/allure-framework/allure2/releases/download/2.24.0/allure-2.24.0.tgz
+          sudo wget \
+            https://github.com/allure-framework/allure2/releases/download/2.24.0/allure-2.24.0.tgz
+
           sudo tar -zxvf allure-2.24.0.tgz -C /opt/
+
           sudo ln -s /opt/allure-2.24.0/bin/allure /usr/bin/allure
 
-          # Additional protection against large attachments
-          if [ -d "allure-results" ]; then
-            find ./allure-results -type f \( -name "*.zip" -o -name "*.webm" -o -name "*.mp4" \) -delete || true
-          fi
+          allure generate ./allure-results \
+            --clean \
+            -o ./allure-history
 
-          allure generate ./allure-results --clean -o ./allure-history
-
-      - name: Deploy on GitHub Pages
+      - name: Deploy Allure Report to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
