@@ -143,3 +143,148 @@ class TestCourses:
         courses_list_page.course_view.menu.click_edit(index=0)
         create_course_page.create_course_exercise_form.check_filled_create_exercise_form(0, 'exercise 1 just try title',
                                                                                          'exercise 1 just try description')
+
+    @allure.title("Create course with 2 exercises")
+    def test_create_course_with_2_exercises(self,
+                                            create_course_page: CreateCoursePage,
+                                            courses_list_page: CoursesPage
+                                            ):
+        course_title = 'course with 2 exercises'
+        course_estimated = '12'
+        course_description = 'course with two exercises description'
+        course_max_score = '11'
+        course_min_score = '2'
+
+        exercise_1_title = 'exercise 1'
+        exercise_1_description = 'exercise 1 description'
+
+        exercise_2_title = 'exercise 2'
+        exercise_2_description = 'exercise 2 description'
+
+        create_course_page.visit_create_course_page()
+        create_course_page.create_course_form_component.check_visible()
+        create_course_page.create_course_exercises_toolbar_view_component.check_visible()
+        create_course_page.check_exercises_empty_view_visibility()
+
+        # Fill course
+        create_course_page.create_course_form_component.fill(
+            course_title,
+            course_estimated,
+            course_description,
+            course_max_score,
+            course_min_score
+        )
+
+        # Create Exercise #1
+        create_course_page.create_course_exercises_toolbar_view_component.create_new_exercise_button.click()
+
+        create_course_page.create_course_exercise_form.fill_create_exercise_form(
+            0,
+            exercise_1_title,
+            exercise_1_description
+        )
+
+        # Create Exercise #2
+        create_course_page.create_course_exercises_toolbar_view_component.create_new_exercise_button.click()
+
+        create_course_page.create_course_exercise_form.fill_create_exercise_form(
+            1,
+            exercise_2_title,
+            exercise_2_description
+        )
+
+        # Upload course image
+        create_course_page.upload_image_widget.check_visible(is_image_uploaded=False)
+        create_course_page.upload_image_widget.upload_preview_image(
+            settings.test_data.image_png_file
+        )
+        create_course_page.upload_image_widget.check_visible(is_image_uploaded=True)
+
+        # Create course
+        create_course_page.create_course_toolbar_view_component.click_create_course_button()
+
+        # Verify created course
+        courses_list_page.course_view.check_visible(
+            index=0,
+            title=course_title,
+            max_score=course_max_score,
+            min_score=course_min_score,
+            estimated_time=course_estimated
+        )
+
+        # Open Edit
+        courses_list_page.course_view.menu.click_edit(index=0)
+
+        # Verify Exercise #1
+        create_course_page.create_course_exercise_form.check_filled_create_exercise_form(
+            0,
+            exercise_1_title,
+            exercise_1_description
+        )
+
+        # Verify Exercise #2
+        create_course_page.create_course_exercise_form.check_filled_create_exercise_form(
+            1,
+            exercise_2_title,
+            exercise_2_description
+        )
+
+    @allure.severity(Severity.NORMAL)
+    @allure.title("Create multiple courses")
+    @allure.tag(AllureTags.COURSES.value)
+    def test_create_multiple_courses(
+            self,
+            create_course_page: CreateCoursePage,
+            courses_list_page: CoursesPage
+    ):
+        # Create Course A
+        create_course_page.visit_create_course_page()
+
+        create_course_page.create_course_form_component.fill(
+            'course A',
+            '12',
+            'course A description',
+            '11',
+            '2'
+        )
+
+        create_course_page.upload_image_widget.upload_preview_image(
+            settings.test_data.image_png_file
+        )
+
+        create_course_page.create_course_toolbar_view_component.click_create_course_button()
+
+        # Create Course B
+        create_course_page.visit_create_course_page()
+
+        create_course_page.create_course_form_component.fill(
+            'course B',
+            '24',
+            'course B description',
+            '22',
+            '4'
+        )
+
+        create_course_page.upload_image_widget.upload_preview_image(
+            settings.test_data.image_png_file
+        )
+
+        create_course_page.create_course_toolbar_view_component.click_create_course_button()
+
+        # Verify Course A
+        courses_list_page.course_view.check_visible(
+            index=0,
+            title='course A',
+            max_score='11',
+            min_score='2',
+            estimated_time='12'
+        )
+
+        # Verify Course B
+        courses_list_page.course_view.check_visible(
+            index=1,
+            title='course B',
+            max_score='22',
+            min_score='4',
+            estimated_time='24'
+        )

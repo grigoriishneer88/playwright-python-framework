@@ -31,7 +31,7 @@ class CourseViewComponent(BaseComponent):
             self.min_score_text.check_have_text(f"Min score: {min_score}", nth=index)
         if estimated_time is not None:
             self.estimated_time.check_visible(nth=index)
-            self.estimated_time.check_have_text(f"Estimated time: {estimated_time}")
+            self.estimated_time.check_have_text(f"Estimated time: {estimated_time}", nth=index)
 
 #added
     @allure.step('Check invisible courses view at index "{index}"')

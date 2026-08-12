@@ -74,3 +74,5 @@ class TestCreateCourseExercises:
             settings.test_data.image_png_file)
         create_course_page.upload_image_widget.check_visible(is_image_uploaded=True)
         create_course_page.create_course_toolbar_view_component.check_visible(is_create_course_disabled=True)
+
+
