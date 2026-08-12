@@ -1,0 +1,6 @@
+INFO     BasePage:base_page.py:17 Opening URL AppRoute.DASHBOARD
+INFO     Base_Element:base_element.py:21 Getting locator with "data-testid=logout-drawer-list-item-title-text" at index" 0"
+INFO     Base_Element:base_element.py:28 Clicking text with name Button and "data-testid=<Locator frame=<Frame name= url='https://nikita-filonov.github.io/qa-automation-engineer-ui-course/#/dashboard'> selector='internal:testid=[data-testid="logout-drawer-list-item-title-text"s] >> nth=0'>" at index" 0"
+INFO     BaseComponent:base_component.py:13 Checking current url: re.compile('.*/#/auth/login')
+INFO     Button:base_element.py:21 Getting locator with "data-testid=login-page-login-button" at index" 0"
+INFO     Button:base_element.py:37 Checking button with name Login is VISIBLE and "data-testid=<Locator frame=<Frame name= url='https://nikita-filonov.github.io/qa-automation-engineer-ui-course/#/auth/login'> selector='internal:testid=[data-testid="login-page-login-button"s] >> nth=0'>" at index" 0"

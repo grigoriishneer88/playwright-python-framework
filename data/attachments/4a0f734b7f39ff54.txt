@@ -1,0 +1,5 @@
+INFO     BasePage:base_page.py:17 Opening URL ./#/dashboard
+INFO     Base_Element:base_element.py:21 Getting locator with "data-testid=dashboard-toolbar-title-text" at index" 0"
+INFO     Base_Element:base_element.py:37 Checking text with name dashboard-toolbar-title-text is VISIBLE and "data-testid=<Locator frame=<Frame name= url='https://nikita-filonov.github.io/qa-automation-engineer-ui-course/#/dashboard'> selector='internal:testid=[data-testid="dashboard-toolbar-title-text"s] >> nth=0'>" at index" 0"
+INFO     Base_Element:base_element.py:21 Getting locator with "data-testid=dashboard-toolbar-title-text" at index" 0"
+INFO     Base_Element:base_element.py:63 Checking that text with name dashboard-toolbar-title-text has text Dashboard and "data-testid=<Locator frame=<Frame name= url='https://nikita-filonov.github.io/qa-automation-engineer-ui-course/#/dashboard'> selector='internal:testid=[data-testid="dashboard-toolbar-title-text"s] >> nth=0'>" at index" 0"
