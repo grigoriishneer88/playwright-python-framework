@@ -9,9 +9,12 @@ on:
       - main
 
 jobs:
-  # ДЖОБА 1: Запуск автотестов и сохранение сырых результатов
+
+  # JOB 1: Run automated tests and save raw results
+
   run-tests:
     runs-on: ubuntu-latest
+
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
@@ -27,15 +30,13 @@ jobs:
           pip install -r requirements.txt
           playwright install --with-deps
 
-
       - name: Create .env from template
         run: cp .env.example .env
-        
-      # Убрали continue-on-error согласно требованиям строгого ТЗ (обе джобы должны завершаться успешно)
+
       - name: Run playwright tests with pytest and generate allure results
         run: xvfb-run pytest -m regression --alluredir=./allure-results --numprocesses=2
 
-      - name: Restore Coveage History
+      - name: Restore Coverage History
         uses: actions/cache/restore@v4
         with:
           path: coverage-history.json
@@ -53,8 +54,14 @@ jobs:
         with:
           path: coverage-history.json
           key: coverage-history-${{ github.run_id }}
-#added coverage results
-      - name: Upload coverage Results
+
+      # Remove large Playwright attachments BEFORE uploading Allure results
+      - name: Remove large attachments
+        if: always()
+        run: |
+          find ./allure-results -type f \( -name "*.zip" -o -name "*.webm" -o -name "*.mp4" \) -delete || true
+
+      - name: Upload coverage results
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -62,9 +69,9 @@ jobs:
           path: coverage.html
           retention-days: 1
 
-      # ВАЖНОЕ УСЛОВИЕ ТЗ: Сохраняем папку allure-results как артефакт
+      # Upload cleaned Allure results
       - name: Upload Allure Results
-        if: always() # Сохраняем результаты в любом случае, чтобы было из чего строить отчет
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: allure-results-artifact
@@ -72,12 +79,15 @@ jobs:
           retention-days: 1
 
 
+  # JOB 2: Download results, generate Allure report and publish to GitHub Pages
 
-  # ДЖОБА 2: Скачивание результатов, сборка отчета Allure и публикация на GitHub Pages
   publish-report:
     runs-on: ubuntu-latest
-    needs: run-tests # ВАЖНОЕ УСЛОВИЕ ТЗ: Запускается только после выполнения run-tests
-    if: always()     # Гарантирует, что отчет соберется, даже если в первой джобе упали тесты
+
+    needs: run-tests
+
+    if: always()
+
     permissions:
       contents: write
 
@@ -85,19 +95,19 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
 
-      # ВАЖНОЕ УСЛОВИЕ ТЗ: Загружаем сохраненный артефакт из первой джобы
       - name: Download Allure Results
         uses: actions/download-artifact@v4
         with:
           name: allure-results-artifact
           path: allure-results
 
-      # Вытягиваем историю во временную папку вне рабочей директории git
       - name: Load Allure History
         run: |
           mkdir -p allure-results
           TEMP_DIR=$(mktemp -d)
+
           git clone --branch gh-pages --single-branch https://github.com/${{ github.repository }}.git "$TEMP_DIR" || true
+
           if [ -d "$TEMP_DIR/history" ]; then
             cp -r "$TEMP_DIR/history" ./allure-results/
           fi
@@ -107,15 +117,15 @@ jobs:
           sudo wget https://github.com/allure-framework/allure2/releases/download/2.24.0/allure-2.24.0.tgz
           sudo tar -zxvf allure-2.24.0.tgz -C /opt/
           sudo ln -s /opt/allure-2.24.0/bin/allure /usr/bin/allure
-          
-          # ПОЛНОЕ УДАЛЕНИЕ ВИДЕО И ТРЕЙСОВ (чтобы отчет не весил по 100+ МБ)
+
+          # Additional protection against large attachments
           if [ -d "allure-results" ]; then
             find ./allure-results -type f \( -name "*.zip" -o -name "*.webm" -o -name "*.mp4" \) -delete || true
           fi
-          
+
           allure generate ./allure-results --clean -o ./allure-history
 
-      - name: Deploy on GitHub pages
+      - name: Deploy on GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
